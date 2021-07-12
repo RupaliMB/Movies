@@ -1,0 +1,70 @@
+package com.example.popmoviesapp;
+
+import android.content.Context;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.example.popmoviesapp.Fragment.FragmentMovie;
+
+public class DBHelper extends SQLiteOpenHelper {
+
+    public static final String TABLE_NAME = "movies_favourite";
+    public static final String TABLE_NAME1 = "movies_popular";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ID_MOVIE = "id_movie";
+    public static final String COLUMN_ORIGINAL_TITLE = "original_title";
+    public static final String COLUMN_POSTER_PATH = "poster_patch";
+    public static final String COLUMN_OVERVIEW = "overview";
+    public static final String COLUMN_VOTE_AVERAGE = "vote_average";
+    public static final String COLUMN_RELEASE_DATE = "release_date";
+    //  public static final String COLUMN_IMAGES = "image";
+    private static final String db_name = "myfavoritemovies.db";
+    private static final int db_version =1;
+
+    private static final String create_table_favourites = "create table "
+            + TABLE_NAME + "("
+            + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_ID_MOVIE + " TEXT not null, "
+            + COLUMN_ORIGINAL_TITLE + " TEXT not null, "
+            + COLUMN_POSTER_PATH + " TEXT not null, "
+            + COLUMN_OVERVIEW + " TEXT not null, "
+            + COLUMN_VOTE_AVERAGE + " INTEGER not null, "
+            + COLUMN_RELEASE_DATE + " DATE not null);";
+//    + COLUMN_IMAGES + " BLOB not null);";
+
+    private static final String create_table_popular = "create table "
+        + TABLE_NAME1 + "("
+        + COLUMN_ID + " integer primary key autoincrement, "
+        + COLUMN_ID_MOVIE + " TEXT not null, "
+        + COLUMN_ORIGINAL_TITLE + " TEXT not null, "
+        + COLUMN_POSTER_PATH + " TEXT not null, "
+        + COLUMN_OVERVIEW + " TEXT not null, "
+        + COLUMN_VOTE_AVERAGE + " INTEGER not null, "
+        + COLUMN_RELEASE_DATE + " DATE not null);";
+
+    public DBHelper(Context context) {
+        super(context, db_name, null, db_version);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        try {
+            db.execSQL(create_table_favourites);
+            db.execSQL(create_table_popular);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.w(DBHelper.class.getName(), "Upgrading database from"
+                + "version + "+oldVersion+" to "+newVersion+", which will destroy all old data");
+        db.execSQL("DROP TABLE "+TABLE_NAME);
+        db.execSQL("DROP TABLE "+TABLE_NAME1);
+        onCreate(db);
+    }
+}
